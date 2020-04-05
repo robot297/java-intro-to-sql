@@ -30,7 +30,7 @@ public class MovieList {
     private static void displayAllMovies(){
         List<Movie> allMovies = database.getAllMovies();
         for(Movie movie: allMovies){
-            System.err.println(movie.name);
+            System.err.println(movie);
         }
     }
 
