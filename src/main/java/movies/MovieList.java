@@ -13,6 +13,9 @@ public class MovieList {
         database = new Database(db);
         addNewMovies();
         displayAllMovies();
+        checkIfWatchedAndRate();
+        deletWatchedMovies();
+        displayAllMovies();
     }
 
     private static void addNewMovies(){
@@ -27,7 +30,7 @@ public class MovieList {
     private static void displayAllMovies(){
         List<Movie> allMovies = database.getAllMovies();
         for(Movie movie: allMovies){
-            System.err.println(movie);
+            System.err.println(movie.name);
         }
     }
 
@@ -41,6 +44,19 @@ public class MovieList {
                 movie.watched = true;
                 movie.stars = stars;
                 database.updateMovie(movie);
+            }
+        }
+    }
+
+    private static void deletWatchedMovies(){
+        System.out.println("Here are the movies you have watched.");
+
+        List<Movie> watchedMovies = database.getAllMoviesByWatched(true);
+
+        for(Movie movie: watchedMovies){
+            boolean delete = yesNoInput("Delete " + movie.name + "?");
+            if(delete){
+                database.deleteMovie(movie);
             }
         }
     }
