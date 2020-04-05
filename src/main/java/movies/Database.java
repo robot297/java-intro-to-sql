@@ -35,7 +35,6 @@ public class Database {
     }
 
     public List<Movie> getAllMovies(){
-
         try(Connection connection = DriverManager.getConnection(dataBasePath);
         Statement statement = connection.createStatement()){
 
@@ -53,10 +52,34 @@ public class Database {
             }
             return movies;
         } catch (SQLException sqle){
-            System.err.println("Error querying movie DB table because " + sqle);
+            System.err.println("Error querying movie DB table because " + sqle.getMessage());
             return null;
         }
+    }
 
+    public List<Movie> getAllMoviesByWatched(boolean watchedStatus){
+        try(Connection connection = DriverManager.getConnection(dataBasePath);
+        PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM movies WHERE watched = ?")){
 
+            preparedStatement.setBoolean(1, watchedStatus);
+            ResultSet movieResults = preparedStatement.executeQuery();
+
+            List<Movie> movies = new ArrayList<>();
+
+            while (movieResults.next()){
+                String name = movieResults.getString("name");
+                int stars = movieResults.getInt("stars");
+                boolean watched = movieResults.getBoolean("watched");
+
+                Movie movie = new Movie(name, stars, watched);
+                movies.add(movie);
+            }
+
+            return movies;
+
+        }catch (SQLException sqle){
+            System.err.println("Error querying movie DB table because " + sqle.getMessage());
+            return null;
+        }
     }
 }
