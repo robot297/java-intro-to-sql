@@ -30,4 +30,18 @@ public class MovieList {
             System.err.println(movie);
         }
     }
+
+    private static void checkIfWatchedAndRate(){
+        List<Movie> unwatchedMovies = database.getAllMoviesByWatched(false);
+
+        for(Movie movie: unwatchedMovies){
+            boolean hasWatched = yesNoInput("Have you watched " + movie.name + "?");
+            if(hasWatched){
+                int stars = intInput("What is your rating for " + movie.name + " out of 5 stars?");
+                movie.watched = true;
+                movie.stars = stars;
+                database.updateMovie(movie);
+            }
+        }
+    }
 }

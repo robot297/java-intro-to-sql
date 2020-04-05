@@ -82,4 +82,20 @@ public class Database {
             return null;
         }
     }
+
+    public void updateMovie(Movie movie){
+        String sql = "UPDATE movies SET stars = ?, watched = ? WHERE name = ?";
+
+        try(Connection connection = DriverManager.getConnection(dataBasePath);
+        PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+
+            preparedStatement.setInt(1, movie.stars);
+            preparedStatement.setBoolean(2, movie.watched);
+            preparedStatement.setString(3, movie.name);
+
+            preparedStatement.executeUpdate();
+        }catch (SQLException sqle){
+            System.err.println("Error updating movie DB table for movie " + movie + " because " + sqle.getMessage());
+        }
+    }
 }
