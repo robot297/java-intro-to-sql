@@ -60,4 +60,18 @@ public class MovieList {
             }
         }
     }
+
+    private static void searchForMovie(){
+        String movieName = stringInput("Enter the movie name.");
+        List<Movie> matches = database.search(movieName);
+
+        if(matches.isEmpty()) {
+            System.out.println("No matches");
+        } else {
+            System.out.println("Here are the matching movies.");
+            for (Movie movie : matches) {
+                System.out.println(movie.name);
+            }
+        }
+    }
 }

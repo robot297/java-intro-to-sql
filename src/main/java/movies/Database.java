@@ -112,4 +112,31 @@ public class Database {
             System.err.println("Error deleting movie from the table for move " + movie.name + " because " + sqle.getMessage());
         }
     }
+
+    public List<Movie> search(String searchTerm){
+        String sql = "SELECT * FROM movies WHERE UPPER(name) LIKE UPPER(?)";
+
+        try(Connection connection = DriverManager.getConnection(dataBasePath);
+        PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+
+            preparedStatement.setString(1, "5" + searchTerm + "%");
+            ResultSet movieResults = preparedStatement.executeQuery();
+
+            List<Movie> movies = new ArrayList<>();
+
+            while (movieResults.next()){
+                String name = movieResults.getString("name");
+                int stars = movieResults.getInt("stars");
+                boolean watched = movieResults.getBoolean("watched");
+
+                Movie movie = new Movie(name, stars, watched);
+                movies.add(movie);
+            }
+
+            return movies;
+        }catch (SQLException sqle){
+            System.err.println("Error querying movie DB table for movies by watched status because " + sqle);
+            return null;
+        }
+    }
 }
